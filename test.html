@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Interface</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-container {
+            background-image: url('background.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .camera-preview {
+            width: 150px;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #camera {
+            width: 100%;
+            height: 100%;
+        }
+
+        .question-container {
+            margin-bottom: 20px;
+            color: #050505; /* Ensures question text is visible */
+        }
+
+        .options label {
+            color: #080000; /* Ensures option labels are visible */
+        }
+
+        .navigation button {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h2>MCQ Test</h2>
+            <div class="camera-preview">
+                <video id="camera" autoplay></video>
+            </div>
+        </div>
+        <div class="question-container">
+            <div class="question">
+                <p id="question-text">Question 1: What is the capital of France?</p>
+            </div>
+            <div class="options" id="options-container">
+                <!-- Options will be injected here by JavaScript -->
+            </div>
+        </div>
+        <div class="navigation">
+            <button id="previous-btn">Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+        <div class="submit-section">
+            <button id="submit-btn" class="submit-btn">Submit Test</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, question: 'What is the capital of France?', options: ['Paris', 'London', 'Rome', 'Berlin'] },
+            { id: 2, question: 'Which planet is known as the Red Planet?', options: ['Mars', 'Jupiter', 'Saturn', 'Venus'] },
+            { id: 3, question: 'What is the largest ocean on Earth?', options: ['Pacific Ocean', 'Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean'] },
+            { id: 4, question: 'Who wrote "To Kill a Mockingbird"?', options: ['Harper Lee', 'J.K. Rowling', 'Ernest Hemingway', 'F. Scott Fitzgerald'] },
+            { id: 5, question: 'What is the smallest prime number?', options: ['2', '3', '5', '7'] },
+            { id: 6, question: 'Which element has the chemical symbol "O"?', options: ['Oxygen', 'Gold', 'Silver', 'Osmium'] },
+            { id: 7, question: 'What is the hardest natural substance on Earth?', options: ['Diamond', 'Gold', 'Iron', 'Platinum'] },
+            { id: 8, question: 'In what year did the Titanic sink?', options: ['1912', '1915', '1918', '1920'] },
+            { id: 9, question: 'What is the largest mammal?', options: ['Blue Whale', 'Elephant', 'Giraffe', 'Hippopotamus'] },
+            { id: 10, question: 'Which country is known as the Land of the Rising Sun?', options: ['Japan', 'China', 'South Korea', 'Thailand'] },
+            { id: 11, question: 'What is the capital of Australia?', options: ['Canberra', 'Sydney', 'Melbourne', 'Brisbane'] },
+            { id: 12, question: 'What is the smallest country in the world?', options: ['Vatican City', 'Monaco', 'San Marino', 'Liechtenstein'] },
+            { id: 13, question: 'Who painted the Mona Lisa?', options: ['Leonardo da Vinci', 'Vincent van Gogh', 'Pablo Picasso', 'Claude Monet'] },
+            { id: 14, question: 'What is the chemical symbol for Gold?', options: ['Au', 'Ag', 'Pb', 'Fe'] },
+            { id: 15, question: 'How many continents are there on Earth?', options: ['7', '6', '5', '8'] }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function renderQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = `Question ${question.id}: ${question.question}`;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = question.options.map(option => `
+                <label>
+                    <input type="radio" name="question${question.id}" value="${option}"> ${option}
+                </label>
+            `).join('');
+            document.getElementById('previous-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').textContent = currentQuestionIndex < questions.length - 1 ? 'Next' : 'Finish';
+        }
+
+        document.getElementById('previous-btn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                submitTest();
+            }
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            submitTest();
+        });
+
+        function submitTest() {
+            // Display popup message
+            alert("You have successfully submitted the test");
+            // Redirect to feedback page after OK
+            window.location.href = 'feedback.html';
+        }
+
+        function startCamera() {
+            const camera = document.getElementById('camera');
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        camera.srcObject = stream;
+                        camera.play();
+                    })
+                    .catch(err => {
+                        alert('Camera access denied or not supported.');
+                    });
+            } else {
+                alert('Camera not supported in this browser.');
+            }
+        }
+
+        // Initialize the test and start the camera
+        renderQuestion();
+        startCamera();
+    </script>
+</body>
+</html>

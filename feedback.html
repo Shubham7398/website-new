@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .feedback-container {
+            background-image: url('image1.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        #feedback-instruction {
+            color: #080808; /* Ensures instruction text is visible */
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating input {
+            display: none; /* Hide the radio buttons */
+        }
+
+        .rating label {
+            color: #ccc; /* Default star color */
+            font-size: 30px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Stars change color to gold when selected */
+        .rating input:checked ~ label {
+            color: #ffd700;
+        }
+
+        .submit-feedback-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-feedback-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .thank-you-message {
+            display: none;
+            background-color: #28a745; /* Green background color */
+            color: #fff; /* White text color */
+            padding: 10px;
+            border-radius: 4px;
+            position: absolute;
+            top: -50px; /* Adjust position as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: fit-content;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <p id="feedback-instruction">Please tell us about your experience with the test:</p>
+        <div class="rating">
+            <!-- Hidden radio inputs with styled labels as stars -->
+            <input type="radio" id="rating5" name="rating" value="5"><label for="rating5">&#9733;</label>
+            <input type="radio" id="rating4" name="rating" value="4"><label for="rating4">&#9733;</label>
+            <input type="radio" id="rating3" name="rating" value="3"><label for="rating3">&#9733;</label>
+            <input type="radio" id="rating2" name="rating" value="2"><label for="rating2">&#9733;</label>
+            <input type="radio" id="rating1" name="rating" value="1"><label for="rating1">&#9733;</label>
+        </div>
+        <button id="submit-feedback-btn" class="submit-feedback-btn">Submit Rating</button>
+        <div id="thank-you-message" class="thank-you-message">Thank you for your response!</div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.rating label');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                // Reset all stars to default color
+                stars.forEach(s => s.style.color = '#ccc');
+
+                // Change the color of selected star and all previous ones
+                for (let i = 0; i <= index; i++) {
+                    stars[i].style.color = '#ffd700';
+                    stars[i].classList.add('blink');
+                }
+
+                // Remove the blink effect after a short delay
+                setTimeout(() => {
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].classList.remove('blink');
+                    }
+                }, 500);
+            });
+        });
+
+        document.getElementById('submit-feedback-btn').addEventListener('click', () => {
+            const rating = document.querySelector('input[name="rating"]:checked');
+            if (rating) {
+                const thankYouMessage = document.getElementById('thank-you-message');
+                thankYouMessage.style.display = 'block'; // Show the thank you message
+                setTimeout(() => {
+                    thankYouMessage.style.display = 'none'; // Hide after 3 seconds
+                }, 3000);
+            } else {
+                alert("Please select a rating before submitting.");
+            }
+        });
+    </script>
+</body>
+</html>

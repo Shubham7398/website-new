@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .results-container {
+            background-image: url('background.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating {
+            margin-top: 20px;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .rating-stars span {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        .rating-stars .active {
+            color: #f5c518;
+        }
+
+        .rating-submit {
+            margin-top: 20px;
+        }
+
+        .rating-submit button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .rating-submit button:hover {
+            background-color: #0056b3;
+        }
+
+        .feedback-message {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup button {
+            background-color: #28a745;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <h2>Test Results</h2>
+        <p>Your test results have been sent to your email.</p>
+        
+        <!-- Feedback Message -->
+        <div class="feedback-message" id="feedbackMessage">
+            <!-- Feedback message will be displayed here -->
+        </div>
+
+        <!-- Rating Section -->
+        <div class="rating">
+            <p>Please rate your experience:</p>
+            <div class="rating-stars">
+                <span data-value="1">&#9733;</span>
+                <span data-value="2">&#9733;</span>
+                <span data-value="3">&#9733;</span>
+                <span data-value="4">&#9733;</span>
+                <span data-value="5">&#9733;</span>
+            </div>
+        </div>
+
+        <div class="rating-submit">
+            <button id="submit-rating">Submit Rating</button>
+        </div>
+    </div>
+
+    <!-- Popup Message -->
+    <div class="popup" id="popupMessage">
+        <p>You have successfully submitted the test!</p>
+        <button id="close-popup">OK</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.rating-stars span');
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            const popup = document.getElementById('popupMessage');
+            const closePopupButton = document.getElementById('close-popup');
+            let ratingValue = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    ratingValue = star.getAttribute('data-value');
+                    updateStars(ratingValue);
+                });
+            });
+
+            document.getElementById('submit-rating').addEventListener('click', () => {
+                if (ratingValue > 0) {
+                    popup.classList.add('active'); // Show popup
+                } else {
+                    feedbackMessage.textContent = 'Please select a rating before submitting.';
+                    feedbackMessage.style.color = '#dc3545'; // Red color for error message
+                }
+            });
+
+            closePopupButton.addEventListener('click', () => {
+                popup.classList.remove('active'); // Hide popup
+                feedbackMessage.textContent = 'Thank you for your feedback!';
+                feedbackMessage.style.color = '#28a745'; // Green color for success message
+                document.getElementById('submit-rating').disabled = true; // Disable the button
+            });
+
+            function updateStars(value) {
+                stars.forEach(star => {
+                    star.classList.toggle('active', star.getAttribute('data-value') <= value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,656 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Test Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <div class="main-container">
+        <h1>Welcome to the Test Environment Platform</h1>
+        <p>Click the button below to log in and start your test.</p>
+        <a href="login.html" class="start-btn">Start Test</a>
+       
+    </div>
+    
+    </image>
+</body>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <form class="login-form" id="loginForm">
+            <h2>Login</h2>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate successful login
+            window.location.href = 'test.html';
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Interface</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-container {
+            background-image: url('background.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .camera-preview {
+            width: 150px;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #camera {
+            width: 100%;
+            height: 100%;
+        }
+
+        .question-container {
+            margin-bottom: 20px;
+            color: #050505; /* Ensures question text is visible */
+        }
+
+        .options label {
+            color: #080000; /* Ensures option labels are visible */
+        }
+
+        .navigation button {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h2>MCQ Test</h2>
+            <div class="camera-preview">
+                <video id="camera" autoplay></video>
+            </div>
+        </div>
+        <div class="question-container">
+            <div class="question">
+                <p id="question-text">Question 1: What is the capital of France?</p>
+            </div>
+            <div class="options" id="options-container">
+                <!-- Options will be injected here by JavaScript -->
+            </div>
+        </div>
+        <div class="navigation">
+            <button id="previous-btn">Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+        <div class="submit-section">
+            <button id="submit-btn" class="submit-btn">Submit Test</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, question: 'What is the capital of France?', options: ['Paris', 'London', 'Rome', 'Berlin'] },
+            { id: 2, question: 'Which planet is known as the Red Planet?', options: ['Mars', 'Jupiter', 'Saturn', 'Venus'] },
+            { id: 3, question: 'What is the largest ocean on Earth?', options: ['Pacific Ocean', 'Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean'] },
+            { id: 4, question: 'Who wrote "To Kill a Mockingbird"?', options: ['Harper Lee', 'J.K. Rowling', 'Ernest Hemingway', 'F. Scott Fitzgerald'] },
+            { id: 5, question: 'What is the smallest prime number?', options: ['2', '3', '5', '7'] },
+            { id: 6, question: 'Which element has the chemical symbol "O"?', options: ['Oxygen', 'Gold', 'Silver', 'Osmium'] },
+            { id: 7, question: 'What is the hardest natural substance on Earth?', options: ['Diamond', 'Gold', 'Iron', 'Platinum'] },
+            { id: 8, question: 'In what year did the Titanic sink?', options: ['1912', '1915', '1918', '1920'] },
+            { id: 9, question: 'What is the largest mammal?', options: ['Blue Whale', 'Elephant', 'Giraffe', 'Hippopotamus'] },
+            { id: 10, question: 'Which country is known as the Land of the Rising Sun?', options: ['Japan', 'China', 'South Korea', 'Thailand'] },
+            { id: 11, question: 'What is the capital of Australia?', options: ['Canberra', 'Sydney', 'Melbourne', 'Brisbane'] },
+            { id: 12, question: 'What is the smallest country in the world?', options: ['Vatican City', 'Monaco', 'San Marino', 'Liechtenstein'] },
+            { id: 13, question: 'Who painted the Mona Lisa?', options: ['Leonardo da Vinci', 'Vincent van Gogh', 'Pablo Picasso', 'Claude Monet'] },
+            { id: 14, question: 'What is the chemical symbol for Gold?', options: ['Au', 'Ag', 'Pb', 'Fe'] },
+            { id: 15, question: 'How many continents are there on Earth?', options: ['7', '6', '5', '8'] }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function renderQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = `Question ${question.id}: ${question.question}`;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = question.options.map(option => `
+                <label>
+                    <input type="radio" name="question${question.id}" value="${option}"> ${option}
+                </label>
+            `).join('');
+            document.getElementById('previous-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').textContent = currentQuestionIndex < questions.length - 1 ? 'Next' : 'Finish';
+        }
+
+        document.getElementById('previous-btn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                submitTest();
+            }
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            submitTest();
+        });
+
+        function submitTest() {
+            // Display popup message
+            alert("You have successfully submitted the test");
+            // Redirect to feedback page after OK
+            window.location.href = 'feedback.html';
+        }
+
+        function startCamera() {
+            const camera = document.getElementById('camera');
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        camera.srcObject = stream;
+                        camera.play();
+                    })
+                    .catch(err => {
+                        alert('Camera access denied or not supported.');
+                    });
+            } else {
+                alert('Camera not supported in this browser.');
+            }
+        }
+
+        // Initialize the test and start the camera
+        renderQuestion();
+        startCamera();
+    </script>
+</body>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .results-container {
+            background-image: url('background.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating {
+            margin-top: 20px;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .rating-stars span {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        .rating-stars .active {
+            color: #f5c518;
+        }
+
+        .rating-submit {
+            margin-top: 20px;
+        }
+
+        .rating-submit button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .rating-submit button:hover {
+            background-color: #0056b3;
+        }
+
+        .feedback-message {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup button {
+            background-color: #28a745;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <h2>Test Results</h2>
+        <p>Your test results have been sent to your email.</p>
+        
+        <!-- Feedback Message -->
+        <div class="feedback-message" id="feedbackMessage">
+            <!-- Feedback message will be displayed here -->
+        </div>
+
+        <!-- Rating Section -->
+        <div class="rating">
+            <p>Please rate your experience:</p>
+            <div class="rating-stars">
+                <span data-value="1">&#9733;</span>
+                <span data-value="2">&#9733;</span>
+                <span data-value="3">&#9733;</span>
+                <span data-value="4">&#9733;</span>
+                <span data-value="5">&#9733;</span>
+            </div>
+        </div>
+
+        <div class="rating-submit">
+            <button id="submit-rating">Submit Rating</button>
+        </div>
+    </div>
+
+    <!-- Popup Message -->
+    <div class="popup" id="popupMessage">
+        <p>You have successfully submitted the test!</p>
+        <button id="close-popup">OK</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.rating-stars span');
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            const popup = document.getElementById('popupMessage');
+            const closePopupButton = document.getElementById('close-popup');
+            let ratingValue = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    ratingValue = star.getAttribute('data-value');
+                    updateStars(ratingValue);
+                });
+            });
+
+            document.getElementById('submit-rating').addEventListener('click', () => {
+                if (ratingValue > 0) {
+                    popup.classList.add('active'); // Show popup
+                } else {
+                    feedbackMessage.textContent = 'Please select a rating before submitting.';
+                    feedbackMessage.style.color = '#dc3545'; // Red color for error message
+                }
+            });
+
+            closePopupButton.addEventListener('click', () => {
+                popup.classList.remove('active'); // Hide popup
+                feedbackMessage.textContent = 'Thank you for your feedback!';
+                feedbackMessage.style.color = '#28a745'; // Green color for success message
+                document.getElementById('submit-rating').disabled = true; // Disable the button
+            });
+
+            function updateStars(value) {
+                stars.forEach(star => {
+                    star.classList.toggle('active', star.getAttribute('data-value') <= value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .feedback-container {
+            background-image: url('image1.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        #feedback-instruction {
+            color: #080808; /* Ensures instruction text is visible */
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating input {
+            display: none; /* Hide the radio buttons */
+        }
+
+        .rating label {
+            color: #ccc; /* Default star color */
+            font-size: 30px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Stars change color to gold when selected */
+        .rating input:checked ~ label {
+            color: #ffd700;
+        }
+
+        .submit-feedback-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-feedback-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .thank-you-message {
+            display: none;
+            background-color: #28a745; /* Green background color */
+            color: #fff; /* White text color */
+            padding: 10px;
+            border-radius: 4px;
+            position: absolute;
+            top: -50px; /* Adjust position as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: fit-content;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <p id="feedback-instruction">Please tell us about your experience with the test:</p>
+        <div class="rating">
+            <!-- Hidden radio inputs with styled labels as stars -->
+            <input type="radio" id="rating5" name="rating" value="5"><label for="rating5">&#9733;</label>
+            <input type="radio" id="rating4" name="rating" value="4"><label for="rating4">&#9733;</label>
+            <input type="radio" id="rating3" name="rating" value="3"><label for="rating3">&#9733;</label>
+            <input type="radio" id="rating2" name="rating" value="2"><label for="rating2">&#9733;</label>
+            <input type="radio" id="rating1" name="rating" value="1"><label for="rating1">&#9733;</label>
+        </div>
+        <button id="submit-feedback-btn" class="submit-feedback-btn">Submit Rating</button>
+        <div id="thank-you-message" class="thank-you-message">Thank you for your response!</div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.rating label');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                // Reset all stars to default color
+                stars.forEach(s => s.style.color = '#ccc');
+
+                // Change the color of selected star and all previous ones
+                for (let i = 0; i <= index; i++) {
+                    stars[i].style.color = '#ffd700';
+                    stars[i].classList.add('blink');
+                }
+
+                // Remove the blink effect after a short delay
+                setTimeout(() => {
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].classList.remove('blink');
+                    }
+                }, 500);
+            });
+        });
+
+        document.getElementById('submit-feedback-btn').addEventListener('click', () => {
+            const rating = document.querySelector('input[name="rating"]:checked');
+            if (rating) {
+                const thankYouMessage = document.getElementById('thank-you-message');
+                thankYouMessage.style.display = 'block'; // Show the thank you message
+                setTimeout(() => {
+                    thankYouMessage.style.display = 'none'; // Hide after 3 seconds
+                }, 3000);
+            } else {
+                alert("Please select a rating before submitting.");
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-container, .login-container, .test-container, .results-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+.start-btn, button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.start-btn:hover, button:hover {
+    background-color: #0056b3;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.camera-preview {
+    width: 150px;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto 20px;
+}
+
+#camera {
+    width: 100%;
+    height: 100%;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.submit-btn {
+    width: 100%;
+    background-color: #28a745;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
+
+
+
+
+
+const camera = document.getElementById('camera');
+
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            camera.srcObject = stream;
+            camera.play();
+        })
+        .catch(err => {
+            alert('Camera access denied or not supported.');
+        });
+} else {
+    alert('Camera not supported in this browser.');
+}
